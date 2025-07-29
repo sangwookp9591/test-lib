@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "msw": "^1.3.5",
     "next": "15.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"
@@ -29,7 +30,6 @@
     "eslint-config-next": "15.4.4",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
-    "msw": "^2.10.4",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5",
