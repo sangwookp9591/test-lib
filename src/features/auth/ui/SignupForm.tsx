@@ -1,39 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-
-export type SignupFormState = {
-    success?: string;
-    error?: string;
-};
-
-async function signupAction(prevState: SignupFormState, formData: FormData): Promise<SignupFormState> {
-    const name = formData.get('name')?.toString();
-    const email = formData.get('email')?.toString();
-    const password = formData.get('password')?.toString();
-    const confirm = formData.get('confirm')?.toString();
-
-    // if (!name || !email || !password || !confirm) {
-    //     return { error: '모든 값을 입력해주세요.' };
-    // }
-
-    if (password !== confirm) {
-        return { error: '비밀번호가 일치하지 않습니다.' };
-    }
-
-    // 실제 서버 API 호출
-    const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
-    });
-
-    if (!res.ok) {
-        return { error: '회원가입 실패' };
-    }
-
-    return { success: '회원가입 성공!' };
-}
+import { signupAction } from '../api/signup';
 
 export default function SignupForm() {
     const [state, formAction, isPending] = useActionState(signupAction, {
