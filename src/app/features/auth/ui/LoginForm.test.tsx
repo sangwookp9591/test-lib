@@ -6,9 +6,11 @@ describe('loginForm', () => {
         render(<LoginForm />); //컴포넌트를 가상으로 브라우저에 렌더링
 
         const input = screen.getByPlaceholderText('이메일 입력');
+        const passwordInputs = screen.getAllByPlaceholderText('비밀번호 입력');
         const button = screen.getByRole('button', { name: '로그인' });
 
         fireEvent.change(input, { target: { value: 'test@example.com' } });
+        fireEvent.change(passwordInputs[0], { target: { value: '1234' } });
         fireEvent.click(button);
 
         expect(screen.getByText('로그인 성공')).toBeInTheDocument();
@@ -18,9 +20,11 @@ describe('loginForm', () => {
         render(<LoginForm />);
 
         const input = screen.getByPlaceholderText('이메일 입력');
+        const passwordInputs = screen.getAllByPlaceholderText('비밀번호 입력');
         const button = screen.getByRole('button', { name: '로그인' });
 
         fireEvent.change(input, { target: { value: 'wrong@example.com' } });
+        fireEvent.change(passwordInputs[0], { target: { value: 'wrong1234' } });
         fireEvent.click(button);
 
         expect(screen.getByText('로그인 실패')).toBeInTheDocument();
