@@ -1,37 +1,42 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { LoginForm } from './LoginForm';
 import { server } from '@/shared/mocks/server';
+import { rest } from 'msw';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-describe('loginForm', () => {
-    it('이메일을 입력하고 성공 메세지를 출력한다', () => {
-        render(<LoginForm />); //컴포넌트를 가상으로 브라우저에 렌더링
-
-        const input = screen.getByPlaceholderText('이메일 입력');
-        const passwordInputs = screen.getAllByPlaceholderText('비밀번호 입력');
-        const button = screen.getByRole('button', { name: '로그인' });
-
-        fireEvent.change(input, { target: { value: 'test@example.com' } });
-        fireEvent.change(passwordInputs[0], { target: { value: '1234' } });
-        fireEvent.click(button);
-
-        expect(screen.getByText('로그인 성공')).toBeInTheDocument();
-    });
-
-    it('틀린 이메일을 입력하면 실패 메시지를 출력한다', () => {
+describe('LoginForm', () => {
+    it('로그인 성공 시 메시지를 보여준다', async () => {
         render(<LoginForm />);
 
-        const input = screen.getByPlaceholderText('이메일 입력');
-        const passwordInputs = screen.getAllByPlaceholderText('비밀번호 입력');
-        const button = screen.getByRole('button', { name: '로그인' });
+        fireEvent.change(screen.getByPlaceholderText('이메일 입력'), {
+            target: { value: 'test@example.com' },
+        });
+        fireEvent.change(screen.getByPlaceholderText('비밀번호 입력'), {
+            target: { value: '1234' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: '로그인' }));
 
-        fireEvent.change(input, { target: { value: 'wrong@example.com' } });
-        fireEvent.change(passwordInputs[0], { target: { value: 'wrong1234' } });
-        fireEvent.click(button);
+        await waitFor(() => {
+            expect(screen.getByText(/로그인 성공/)).toBeInTheDocument();
+        });
+    });
 
-        expect(screen.getByText('로그인 실패')).toBeInTheDocument();
+    it('로그인 실패 시 에러 메시지를 보여준다', async () => {
+        render(<LoginForm />);
+
+        fireEvent.change(screen.getByPlaceholderText('이메일 입력'), {
+            target: { value: 'wrong@example.com' },
+        });
+        fireEvent.change(screen.getByPlaceholderText('비밀번호 입력'), {
+            target: { value: 'wrongpass' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: '로그인' }));
+
+        await waitFor(() => {
+            expect(screen.getByText(/잘못되었습니다/)).toBeInTheDocument();
+        });
     });
 });
