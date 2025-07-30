@@ -8,12 +8,23 @@ export function LoginForm() {
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (email === 'test@example.com' && password === '1234') {
-            setMessage('로그인 성공');
-        } else {
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!res.ok) {
+                throw new Error('로그인 실패');
+            }
+
+            const data = await res.json();
+            setMessage(`로그인 성공: ${data.token}`);
+        } catch (err) {
             setMessage('이메일 또는 비밀번호가 잘못되었습니다');
         }
     };

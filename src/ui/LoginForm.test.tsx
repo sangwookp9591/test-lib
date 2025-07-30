@@ -1,5 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { LoginForm } from './LoginForm';
+import { server } from '@/shared/mocks/server';
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 describe('loginForm', () => {
     it('이메일을 입력하고 성공 메세지를 출력한다', () => {
