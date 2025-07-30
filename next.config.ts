@@ -7,6 +7,7 @@ const {
 const withVanillaExtract = createVanillaExtractPlugin();
 
 const nextConfig: NextConfig = {
+    transpilePackages: ['msw'],
     /* config options here */
     // experimental: {
     //     serverActions: {
