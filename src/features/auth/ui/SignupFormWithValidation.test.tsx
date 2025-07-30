@@ -24,7 +24,11 @@ describe('SignupFormWithValidation', () => {
 
         /**
          * spy는 isValidEmail() 함수를 감시(watch)하는 **"스파이 객체"**입니다.
-        즉, spy는 이 함수가 실제로 호출되었는지, 어떤 인자(argument)로 호출되었는지를 추적할 수 있는 객체예요.
+        isValidEmail('test@example.com')이 실제로 한 번 호출되었는지 확인
+
+        toHaveBeenCalled()	호출 여부
+        toHaveBeenCalledWith(arg)	특정 인자로 호출
+        toHaveBeenCalledTimes(n)	n번 호출되었는지
          */
         expect(spy).toHaveBeenCalledWith('test@example.com');
     });
